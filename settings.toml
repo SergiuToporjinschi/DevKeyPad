@@ -1,7 +1,8 @@
-log.boot.file = "log.log"
+log.folder = "sd/log"
+log.boot.file = "boot.log"
 log.boot.level = "INFO"
 
-log.code.file = "log.log"
+log.code.file = "code.log"
 log.code.level = "DEBUG"
 
 log.periferics.file = "periferics.log"
@@ -9,3 +10,7 @@ log.periferics.level = "DEBUG"
 
 log.deviceController.file = "deviceController.log"
 log.deviceController.level = "DEBUG"
+
+boot.readOnly.GPIO.common = 15
+boot.readOnly.GPIO.switch1 = 9
+boot.readOnly.GPIO.switch2 = 10

@@ -1,21 +1,17 @@
 #------------------ boot with writtable 
-import board
-import digitalio
 import util
+import storage
+
+storage.remount("/", readonly=util.isPushToReadOnly())
+
+# storage.mount("/sd","/sd", readonly=False)
 
 log = util.getLoggerFor('boot')
 
 log.info("Boot sequence started")
 
-# For Gemma M0, Trinket M0, Metro M0/M4 Express, ItsyBitsy M0/M4 Express
-switch = digitalio.DigitalInOut(board.GP2)
-switch.direction = digitalio.Direction.INPUT
-switch.pull = digitalio.Pull.UP
 
-# If the switch pin is connected to ground CircuitPython can write to the drive
-# storage.remount("/", readonly=switch.value)
-
-#--------------------------- USB
+#--------------------------- USB  
 import supervisor
 
 manu = "Me&Co"
@@ -30,7 +26,7 @@ supervisor.set_usb_identification(manufacturer=manu,product=prod, vid=_VID, pid=
 log.debug(f"USB identification set [{manu}, {prod}, {_VID}, {_PID}]")
 
 #--------------------------- USB HID
-log.info("Setting USB HID")
+# log.info("Setting USB HID")
 import usb_hid
 import usb_midi
 
@@ -46,4 +42,5 @@ device = DeviceController.buildDeviceDescriptor()
 
 usb_hid.enable((device,))
 log.debug("USB HID enabled")
+
 log.debug("END")
