@@ -50,8 +50,8 @@ class DeviceController:
             usage_page=0x01,           # Generic Desktop Control
             usage=0x05,                # Gamepad
             report_ids=(report_id,),   # Descriptor uses report ID 5.
-            in_report_lengths=(DeviceController._reportLength,),    # This gamepad sends 1 bytes in its report.
-            out_report_lengths=(DeviceController._reportLength,),   # It does not receive any reports.
+            in_report_lengths=(DeviceController._reportLength,),    #Report length in Bytes(8bits)
+            out_report_lengths=(DeviceController._reportLength,), 
         )
     
     def __init__(self) -> None:
@@ -76,29 +76,22 @@ class DeviceController:
 
     def send(self, list: int[2]):
         rotary_val = list[1]
-        button = list[0]
+        buttons = list[0]
         
         if not (-127 <= rotary_val <= 127):
             raise ValueError("rotary value must be between -127 and 127")
         
-        if not (0 <= button <= 2047): 
+        if not (0 <= buttons <= 2047): 
             raise ValueError("Too many buttons")
         
-        bytess = button.to_bytes(3, 'little')
+        btnAsBytes = buttons.to_bytes(2, 'little')
 
-        self._report[0] = bytess[0]
-        self._report[1] = bytess[1]
-        # self._report[2] = bytess[2]
-        #convert rotary_val to little binary signed 
+        self._report[0] = btnAsBytes[0]
+        self._report[1] = btnAsBytes[1]
         self._report[2] = rotary_val.to_bytes(1, 'little', signed=True)[0]
-        
 
-        # self._report[2] = 0x00
         print(' '.join(f"{byte:08b}" for byte in self._report), list)
         self._controller.send_report(self._report)
         self._lastReport = self._report
-
-    # def _convertToBinary(self, val: int[]) -> bytes:
-    #     return val.to_bytes(2, 'little')
 
 
