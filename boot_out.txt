@@ -2,3 +2,8 @@ Adafruit CircuitPython 9.0.5 on 2024-05-22; Raspberry Pi Pico with rp2040
 Board ID:raspberry_pi_pico
 UID:E6604430438B3824
 [2K[0Gboot.py output:
+
+1.496 [boot]: INFO - Boot sequence started
+1.501 [boot]: INFO - Setting USB HID
+
+1.618 [deviceController]: DEBUG - Build device descriptor for report ID 5

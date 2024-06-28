@@ -3,7 +3,7 @@ import board
 import digitalio
 import util
 
-log = util.getLoggerFor('code')
+log = util.getLoggerFor('boot')
 
 log.info("Boot sequence started")
 
@@ -23,6 +23,9 @@ prod = "Development key pad"
 _VID = 0x6001
 _PID = 0x1000
 interface_name = "Development key pad"
+
+
+
 supervisor.set_usb_identification(manufacturer=manu,product=prod, vid=_VID, pid=_PID)
 log.debug(f"USB identification set [{manu}, {prod}, {_VID}, {_PID}]")
 
@@ -30,7 +33,7 @@ log.debug(f"USB identification set [{manu}, {prod}, {_VID}, {_PID}]")
 log.info("Setting USB HID")
 import usb_hid
 import usb_midi
-from modules.usb_device import DeviceController
+
 
 usb_midi.disable() 
 log.debug("USB MIDI disabled")
@@ -38,8 +41,9 @@ log.debug("USB MIDI disabled")
 usb_hid.set_interface_name(interface_name)
 log.debug(f"Interface name set {interface_name} ")
 
+from modules.usb_device import DeviceController
 device = DeviceController.buildDeviceDescriptor()
-
 
 usb_hid.enable((device,))
 log.debug("USB HID enabled")
+log.debug("END")

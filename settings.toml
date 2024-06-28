@@ -1,5 +1,5 @@
 log.boot.file = "log.log"
-log.boot.level = "DEBUG"
+log.boot.level = "INFO"
 
 log.code.file = "log.log"
 log.code.level = "DEBUG"
