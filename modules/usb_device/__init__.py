@@ -1,22 +1,25 @@
 import time
 import usb_hid
 from adafruit_hid import find_device
+import util
+
+log = util.getLoggerFor('deviceController')
 
 class DeviceController:
     _reportLength = 3
     _controller = None
     _report = None
     _lastReport = None
+    _report_id = 5
     @staticmethod
     def buildDeviceDescriptor() -> usb_hid.Device:
-        report_id = 5
         return usb_hid.Device(
             report_descriptor=bytes((
                 0x05, 0x01,        # Usage Page (Generic Desktop Ctrls)
                 0x09, 0x05,        # Usage (Game Pad)
                 0xA1, 0x01,        # Collection (Application)
                 
-                0x85, report_id,   # Report ID (5)
+                0x85, DeviceController._report_id,   # Report ID (5)
                 0xA1, 0x00,        # Collection (Physical)
 
                 # Button
@@ -90,7 +93,7 @@ class DeviceController:
         self._report[1] = btnAsBytes[1]
         self._report[2] = rotary_val.to_bytes(1, 'little', signed=True)[0]
 
-        print(f"{self._report[1]:08b} {self._report[0]:08b} {self._report[2]:08b}", list)
+        # print(f"{self._report[1]:08b} {self._report[0]:08b} {self._report[2]:08b}", list)
         self._controller.send_report(self._report)
         self._lastReport = self._report
 

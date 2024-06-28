@@ -1,0 +1,11 @@
+log.boot.file = "log.log"
+log.boot.level = "DEBUG"
+
+log.code.file = "log.log"
+log.code.level = "DEBUG"
+
+log.periferics.file = "periferics.log"
+log.periferics.level = "DEBUG"
+
+log.deviceController.file = "deviceController.log"
+log.deviceController.level = "DEBUG"

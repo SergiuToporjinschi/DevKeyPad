@@ -1,7 +1,12 @@
 #------------------ boot with writtable 
 import board
 import digitalio
-import storage
+import util
+
+log = util.getLoggerFor('code')
+
+log.info("Boot sequence started")
+
 # For Gemma M0, Trinket M0, Metro M0/M4 Express, ItsyBitsy M0/M4 Express
 switch = digitalio.DigitalInOut(board.GP2)
 switch.direction = digitalio.Direction.INPUT
@@ -12,17 +17,29 @@ switch.pull = digitalio.Pull.UP
 
 #--------------------------- USB
 import supervisor
-supervisor.set_usb_identification(manufacturer="Me&Co",product="Development key pad", vid=0x6001, pid=0x1000)
+
+manu = "Me&Co"
+prod = "Development key pad"
+_VID = 0x6001
+_PID = 0x1000
+interface_name = "Development key pad"
+supervisor.set_usb_identification(manufacturer=manu,product=prod, vid=_VID, pid=_PID)
+log.debug(f"USB identification set [{manu}, {prod}, {_VID}, {_PID}]")
 
 #--------------------------- USB HID
+log.info("Setting USB HID")
 import usb_hid
 import usb_midi
 from modules.usb_device import DeviceController
 
 usb_midi.disable() 
-usb_hid.set_interface_name("Development key pad")
+log.debug("USB MIDI disabled")
+
+usb_hid.set_interface_name(interface_name)
+log.debug(f"Interface name set {interface_name} ")
+
 device = DeviceController.buildDeviceDescriptor()
 
 
 usb_hid.enable((device,))
-  
+log.debug("USB HID enabled")

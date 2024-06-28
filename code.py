@@ -1,11 +1,12 @@
 import asyncio
 from modules.usb_device import DeviceController
 from modules.periferics import Periferics
+import util
 
-print("\n")
+log = util.getLoggerFor('code')
 
 async def updateScreen(per: Periferics):
-    print('starting updateScreen')
+    log.debug('starting updateScreen')
     while True:
         if per.hasReportChanged:
             rep = per.report 
@@ -13,15 +14,15 @@ async def updateScreen(per: Periferics):
         await asyncio.sleep(0)     
 
 async def updatePeriferics(per: Periferics):
-    print('starting updatePeriferics')
+    log.debug('starting updatePeriferics')
     while True:
         per.update()
         await asyncio.sleep(0)   
 
 async def updateUSB(per: Periferics): 
+    log.debug('starting updateUSB')
     dev = DeviceController()
    
-    print('starting updateUSB')
     while True:
         if per.hasReportChanged:
             dev.send(per.report)
@@ -36,4 +37,5 @@ async def main():
             asyncio.create_task(updateUSB(per)), 
         ) 
 
+log.info("Code started")
 asyncio.run(main())   
