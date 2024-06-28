@@ -90,7 +90,7 @@ class DeviceController:
         self._report[1] = btnAsBytes[1]
         self._report[2] = rotary_val.to_bytes(1, 'little', signed=True)[0]
 
-        print(' '.join(f"{byte:08b}" for byte in self._report), list)
+        print(f"{self._report[1]:08b} {self._report[0]:08b} {self._report[2]:08b}", list)
         self._controller.send_report(self._report)
         self._lastReport = self._report
 
