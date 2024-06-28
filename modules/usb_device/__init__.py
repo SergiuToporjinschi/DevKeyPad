@@ -64,30 +64,41 @@ class DeviceController:
         # Do a no-op to test if HID device is ready.
         # If not, wait a bit and try once more.
         try:
-            self.send(0, 0)
+            self.send([0, 0])
         except OSError:
             time.sleep(1)
-            self.send(0, 0)
+            self.send([0, 0])
             
     def readReport(self):
         val = self._controller.get_last_received_report(5)
         if val is not None:
             print("**********************" + val)
 
-    def send(self, button: int, rotary_val: int):
+    def send(self, list: int[2]):
+        rotary_val = list[1]
+        button = list[0]
+        
         if not (-127 <= rotary_val <= 127):
             raise ValueError("rotary value must be between -127 and 127")
-        if not (0 <= button <= 1024):
+        
+        if not (0 <= button <= 2047): 
             raise ValueError("Too many buttons")
         
-        bytess = button.to_bytes(2, 'big')
-        print("sss: ", bytess)
-        self._report[2] = 0x00
-        self._report[1] = bytess[1]
+        bytess = button.to_bytes(3, 'little')
+
         self._report[0] = bytess[0]
-        # self._controller.send_report(self._report)
+        self._report[1] = bytess[1]
+        # self._report[2] = bytess[2]
+        #convert rotary_val to little binary signed 
+        self._report[2] = rotary_val.to_bytes(1, 'little', signed=True)[0]
+        
+
+        # self._report[2] = 0x00
+        print(' '.join(f"{byte:08b}" for byte in self._report), list)
+        self._controller.send_report(self._report)
         self._lastReport = self._report
-        formatted_report = ' '.join(f"{byte:08b}" for byte in self._report)
-        print("-" + formatted_report)
+
+    # def _convertToBinary(self, val: int[]) -> bytes:
+    #     return val.to_bytes(2, 'little')
 
 
