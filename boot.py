@@ -4,8 +4,6 @@ import storage
 
 storage.remount("/", readonly=util.isPushToReadOnly())
 
-# storage.mount("/sd","/sd", readonly=False)
-
 log = util.getLoggerFor('boot')
 
 log.info("Boot sequence started")

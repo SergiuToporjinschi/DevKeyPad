@@ -12,7 +12,8 @@ def getLoggerFor(name):
     print("")
     log = logging.getLogger(name)
     if os.getenv(f"log.{name}.file") and not storage.getmount("/").readonly:
-        log.addHandler(DevLogFileHandler(os.getenv(f"log.{name}.file"), maxBytes=1024*1024, backupCount=5))
+        log.addHandler(DevLogFileHandler(getLogFolder() + os.getenv(f"log.{name}.file"), maxBytes=1024*1024, backupCount=5))
+
     else:
         log.addHandler(DevLogHandler())
 
@@ -66,4 +67,20 @@ def isPushToReadOnly() -> bool:
     colSwt2.deinit()
     rowSwt.deinit()
 
+    return result
+
+def path_exists(path):
+    try:
+        os.stat(path)
+        return True
+    except OSError:
+        return False
+
+def getLogFolder():
+    result = "/"
+    if os.getenv(f"log.folder"):
+        if not path_exists(os.getenv(f"log.folder")):
+            os.mkdir(os.getenv(f"log.folder"))
+        result = os.getenv(f"log.folder")
+    
     return result
