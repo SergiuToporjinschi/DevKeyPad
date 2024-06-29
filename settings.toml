@@ -14,3 +14,25 @@ log.deviceController.level = "DEBUG"
 boot.readOnly.GPIO.common = 15
 boot.readOnly.GPIO.switch1 = 9
 boot.readOnly.GPIO.switch2 = 10
+
+# INCREMENTAL -> returns the current incremental position. When starting, current position is 0
+# RELATIVE -> will send -X or +X the sign will determin the rotation direction - for CCW and + for CW 
+# if set to relative code.refreshPause.updateUSB needs to be > 0 for having a good result other wise the value will be almost all the time 1 or -1 
+# user will not have time to change the value too much between readings
+periferics.encode.mode = "RELATIVE" 
+
+# the refresh rate of values red from periferics depends on how much delay is between readings
+# a value of 0 will set updatePeriferics next in the queue for execution
+code.refreshPause.updatePeriferics = "0"
+
+# how often the USB report is cheched and send to the host 
+# a value of 0 will set updateUSB next in the queue for execution
+#   if periferics.encode.mode = "RELATIVE" is recomanded to have a value of at least 0.01 for code.refreshPause.updateUSB
+#   if periferics.encode.mode = "RELATIVE" and code.refreshPause.updateUSB = 0 the user will not have enoght time to change the value between readings 
+#   so the value will be almost all the time 1 or -1
+# lower number: more reports send with a lower payload value
+# higher number: less reports send with a higher payload value
+# WARNING!!! 
+# this value will affect the number of USB reports send / second 
+code.refreshPause.updateUSB = "0.05"
+

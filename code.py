@@ -2,8 +2,12 @@ import asyncio
 from modules.usb_device import DeviceController
 from modules.periferics import Periferics
 import util
+import os
 
 log = util.getLoggerFor('code')
+
+updatePerifericsPause = float(os.getenv("code.refreshPause.updatePeriferics"))
+updateUSBPause = float(os.getenv("code.refreshPause.updateUSB"))
 
 async def updateScreen(per: Periferics):
     log.debug('starting updateScreen')
@@ -17,7 +21,7 @@ async def updatePeriferics(per: Periferics):
     log.debug('starting updatePeriferics')
     while True:
         per.update()
-        await asyncio.sleep(0)   
+        await asyncio.sleep(updatePerifericsPause)   
 
 async def updateUSB(per: Periferics): 
     log.debug('starting updateUSB')
@@ -26,7 +30,7 @@ async def updateUSB(per: Periferics):
     while True:
         if per.hasReportChanged:
             dev.send(per.report)
-        await asyncio.sleep(0)   
+        await asyncio.sleep(updateUSBPause)   
 
 
 async def main():
