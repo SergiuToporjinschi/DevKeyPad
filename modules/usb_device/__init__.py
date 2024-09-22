@@ -108,9 +108,10 @@ class DeviceController:
 
         self._report[0] = btnAsBytes[0]
         self._report[1] = btnAsBytes[1]
-        self._report[2] = rotary_val.to_bytes(1, 'little', signed=True)[0]
-        
+        self._report[2] = rotary_val.to_bytes(1, 'big', signed=True)[0]
         log.debug(f"Report sent: [{self._report[1]:08b} {self._report[0]:08b} {self._report[2]:08b}]{list}")
+
+
         self._controller.send_report(self._report)
         self._lastReport = self._report
 
