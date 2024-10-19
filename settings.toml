@@ -34,5 +34,5 @@ code.refreshPause.updatePeriferics = "0"
 # higher number: less reports send with a higher payload value
 # WARNING!!! 
 # this value will affect the number of USB reports send / second 
-code.refreshPause.updateUSB = "0.05"
+code.refreshPause.updateUSB = "0.0"
 
